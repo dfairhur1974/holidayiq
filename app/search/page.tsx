@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import type { SearchResults, SearchParams } from '@/lib/types'
 import SearchBar from '@/components/SearchBar'
@@ -16,6 +16,14 @@ import { type DateState, type PeopleState, buildDateSuffix } from '@/components/
 type Tab = 'packages' | 'flights' | 'hotels' | 'cars' | 'villas'
 
 export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-green-700" /></div>}>
+      <SearchPageInner />
+    </Suspense>
+  )
+}
+
+function SearchPageInner() {
   const sp = useSearchParams()
   const router = useRouter()
   const [results, setResults] = useState<SearchResults | null>(null)
